@@ -1,5 +1,7 @@
 package fraction;
 
+import java.lang.ArithmeticException;
+
 public class FractionImpl implements Fraction {
     /**
      * Parameters are the <em>numerator</em> and the <em>denominator</em>.
@@ -12,8 +14,40 @@ public class FractionImpl implements Fraction {
      * @param numerator
      * @param denominator
      */
+
+    int numerator;
+    int denominator;
+    boolean isDenNegative;
+    boolean isNumNegative;
+
     public FractionImpl(int numerator, int denominator) {
         // TODO
+        this.numerator = numerator;
+        this.denominator = denominator;
+        isDenNegative = false;
+
+        if(this.denominator == 0){
+            throw new ArithmeticException("Denominator can't be equal to zero");
+        } else if(this.denominator < 0){
+            this.denominator = Math.abs(this.denominator);
+            isDenNegative = true;
+        }
+        if (this.numerator < 0){
+            this.numerator = Math.abs(this.numerator);
+            isNumNegative = true;
+        }
+
+        for (int i = Math.min(this.numerator, this.denominator); i > 0 ; i--) {
+            if (this.numerator % i == 0 && this.denominator % i == 0){
+                this.numerator = this.numerator/i;
+                this.denominator = this.denominator/i;
+                return;
+            }
+        }
+
+        if (isDenNegative && !isNumNegative || !isDenNegative && isNumNegative ){
+                this.numerator *= -1;
+        }
     }
 
     /**
@@ -23,6 +57,8 @@ public class FractionImpl implements Fraction {
      */
     public FractionImpl(int wholeNumber) {
         // TODO
+        this.numerator = wholeNumber;
+        this.denominator = 1;
     }
 
     /**
