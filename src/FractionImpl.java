@@ -74,6 +74,71 @@ public class FractionImpl implements Fraction {
      */
     public FractionImpl(String fraction) {
         // TODO
+
+        this.numerator = 0;
+        this.denominator = 0;
+
+//        fraction = fraction.trim();
+        String[] fractArray = fraction.trim().split("/");
+
+        if(fractArray.length == 1){
+            String num = fractArray[0].trim();
+
+            for (int i = 0; i < num.length() ; i++) {
+                char cha = num.charAt(i);
+                int chaToInt = cha;
+
+                if(i == 0 && chaToInt == 45){
+                    isNumNegative = true;
+                } else if (chaToInt < 48 && chaToInt > 57){
+                    throw new NumberFormatException("Malformed input");
+                }
+            }
+
+            this.numerator = Integer.parseInt(num);
+            this.denominator = 1;
+        }
+
+        else if (fractArray.length == 2) {
+            String num;
+
+            for (int i = 0; i < fractArray.length ; i++) {
+                num = fractArray[i].trim();
+
+                for (int j = 0; j < num.length(); j++) {
+
+                    char cha = num.charAt(j);
+                    int chaToInt = cha;
+
+                    if(j == 0 && chaToInt == 45){
+                        if (i == 0) {
+                            isNumNegative = true;
+                        } else {
+                            isDenNegative = true;
+                        }
+
+                    } else if (chaToInt < 48 && chaToInt > 57){
+                        throw new NumberFormatException("Malformed input");
+                    }
+                }
+                if(i == 0){
+                    this.numerator = Math.abs(Integer.parseInt(num));
+                } else if(i == 1){
+                    this.denominator = Math.abs(Integer.parseInt(num));
+                }
+            }
+
+            if (isDenNegative && !isNumNegative || !isDenNegative && isNumNegative ){
+                this.numerator *= -1;
+            }
+        } else{
+            throw new NumberFormatException("Malformed input");
+        }
+    }
+
+    private int NumFromString(String a){
+
+        return 0;
     }
 
     /**
@@ -170,5 +235,16 @@ public class FractionImpl implements Fraction {
     @Override
     public String toString() {
         return null;
+    }
+
+    public static void main(String[] args) {
+//        FractionImpl f = new FractionImpl("  10 //4");
+//        System.out.println(f);
+//        FractionImpl f2 = new FractionImpl("  1 0 /4");
+//        System.out.println(f2);
+        FractionImpl f3 = new FractionImpl("  10 / -4");
+        System.out.println(f3);
+        FractionImpl f4 = new FractionImpl("  -10 / -4");
+        System.out.println(f4);
     }
 }
