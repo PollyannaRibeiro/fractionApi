@@ -18,39 +18,18 @@ public class FractionImpl implements Fraction {
      * @param numerator
      * @param denominator
      */
-
-    int numerator;
-    int denominator;
-    boolean isDenNegative;
-    boolean isNumNegative;
-
     public FractionImpl(int numerator, int denominator) {
-        // TODO
-        this.numerator = numerator;
-        this.denominator = denominator;
-        isDenNegative = false;
+        if(denominator == 0){
+            throw new ArithmeticException("Divide by zero");
+        }else if (numerator == 0){
+            this.numerator = 0;
+            this.denominator = 1;
+            return;
+        } else{
+            int[] numDen = reducedForm(numerator, denominator);
 
-        if(this.denominator == 0){
-            throw new ArithmeticException("Denominator can't be equal to zero");
-        } else if(this.denominator < 0){
-            this.denominator = Math.abs(this.denominator);
-            isDenNegative = true;
-        }
-        if (this.numerator < 0){
-            this.numerator = Math.abs(this.numerator);
-            isNumNegative = true;
-        }
-
-        for (int i = Math.min(this.numerator, this.denominator); i > 0 ; i--) {
-            if (this.numerator % i == 0 && this.denominator % i == 0){
-                this.numerator = this.numerator/i;
-                this.denominator = this.denominator/i;
-                return;
-            }
-        }
-
-        if (isDenNegative && !isNumNegative || !isDenNegative && isNumNegative ){
-                this.numerator *= -1;
+            this.numerator = numDen[0];
+            this.denominator = numDen[1];
         }
     }
 
@@ -60,7 +39,7 @@ public class FractionImpl implements Fraction {
      * @param wholeNumber representing the numerator
      */
     public FractionImpl(int wholeNumber) {
-        // TODO
+
         this.numerator = wholeNumber;
         this.denominator = 1;
     }
@@ -104,25 +83,71 @@ public class FractionImpl implements Fraction {
         }
     }
 
-    private int NumFromString(String a){
+    /**
+     * Helper to reduce the fraction form, finding the greatest common divisor and returning the new numbers.
+     * Two integers arguments are needed, and they must be given in the correct order - numerator, and denominator.
+     *
+     * @param numerator
+     * @param denominator
+     * @return an array with 2 elements, the reduced numerator and denominator in this respective order
+     */
+    private static int[] reducedForm(int numerator, int denominator){
+        boolean isNumNegative = numerator < 0;
+        boolean isDenNegative = denominator < 0;
 
-        return 0;
+        int aPos = Math.abs(numerator);
+        int bPos = Math.abs(denominator);
+        int[] result = new int[2];
+
+//        It gets the minimum number (between numerator and denominator) and from this min number it goes to the
+//        loop and stops as soon it finds the first (and bigger) divisor where the numerator and denominator
+//        modules are equal to 0 and returns it new values:
+//        - numerator/divisor
+//        - denominator/divisor
+        for (int i = Math.min(aPos, bPos) ; i > 0 ; i--) {
+            if (aPos % i == 0 && bPos % i == 0){
+                aPos = aPos/i;
+                bPos = bPos/i;
+
+                if (isDenNegative && !isNumNegative || !isDenNegative && isNumNegative ){
+                    result[0] = aPos*(-1);
+                } else {
+                    result[0] = aPos;
+                }
+                result[1] = bPos;
+            }
+        }
+        return result;
     }
 
     /**
      * @inheritDoc
      */
+
     @Override
     public Fraction add(Fraction f) {
-        return null;
+        FractionImpl frac = new FractionImpl(String.valueOf(f));
+        int fracNum = frac.numerator;
+        int fracDen = frac.denominator;
+
+        int sumNumerator = (this.numerator * fracDen) + (fracNum * this.denominator);
+        int sumDenominator = this.denominator*fracDen;
+        return new FractionImpl(sumNumerator, sumDenominator);
     }
 
     /**
      * @inheritDoc
      */
+
     @Override
     public Fraction subtract(Fraction f) {
-        return null;
+        FractionImpl frac = new FractionImpl(String.valueOf(f));
+        int fracNum = frac.numerator;
+        int fracDen = frac.denominator;
+
+        int subNumerator = (this.numerator * fracDen) - (fracNum * this.denominator);
+        int subDenominator = this.denominator*fracDen;
+        return new FractionImpl(subNumerator, subDenominator);
     }
 
     /**
@@ -130,36 +155,52 @@ public class FractionImpl implements Fraction {
      */
     @Override
     public Fraction multiply(Fraction f) {
-        return null;
+        FractionImpl frac = new FractionImpl(String.valueOf(f));
+        int fracNum = frac.numerator;
+        int fracDen = frac.denominator;
+
+        int multNumerator = (this.numerator * fracNum);
+        int multDenominator = this.denominator*fracDen;
+        return new FractionImpl(multNumerator, multDenominator);
     }
 
     /**
      * @inheritDoc
      */
+
     @Override
     public Fraction divide(Fraction f) {
-        return null;
+        FractionImpl frac = new FractionImpl(String.valueOf(f));
+        int fracNum = frac.numerator;
+        int fracDen = frac.denominator;
+
+        int divNumerator = this.numerator * fracDen;
+        int divDenominator = fracNum * this.denominator;
+        return new FractionImpl(divNumerator, divDenominator);
     }
 
     /**
      * @inheritDoc
      */
+
     @Override
     public Fraction abs() {
-        return null;
+        return new FractionImpl(Math.abs(this.numerator), Math.abs(this.denominator));
     }
 
     /**
      * @inheritDoc
      */
+
     @Override
     public Fraction negate() {
-        return null;
+        return new FractionImpl((-1*(this.numerator)), this.denominator);
     }
 
     /**
      * @inheritDoc
      */
+
     @Override
     public int hashCode() {
         return super.hashCode();
@@ -168,9 +209,19 @@ public class FractionImpl implements Fraction {
     /**
      * @inheritDoc
      */
+
     @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+    public boolean equals (Object obj) {
+        if (obj instanceof FractionImpl) {
+            FractionImpl frac = (FractionImpl) obj; // converts the obj to a new FractionImpl
+            int fracNum = frac.numerator;
+            int fracDen = frac.denominator;
+
+            boolean isEqual = this.numerator == fracNum && this.denominator == fracDen;
+            return isEqual;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -184,35 +235,48 @@ public class FractionImpl implements Fraction {
     /**
      * @inheritDoc
      */
+//    This method inverts the position of the instances of FractionImpl, returning it as a new fraction.
     @Override
     public Fraction inverse() {
-        return null;
+        if(this.numerator < 0){
+            return new FractionImpl((-1 * this.denominator), (-1 * this.numerator));
+        }
+        return new FractionImpl(this.denominator, this.numerator);
     }
 
     /**
      * @inheritDoc
      */
+
     @Override
     public int compareTo(Fraction o) {
+        FractionImpl frac = new FractionImpl(String.valueOf(o));
+        int fracNum = frac.numerator;
+        int fracDen = frac.denominator;
+
+        double elem1;
+        double elem2;
+
+        elem1 = (double)(int) this.numerator/this.denominator;
+        elem2 = (double)(int) fracNum/fracDen;
+
+        if(elem1 > elem2){
+            return 1;
+        } else if(elem1 < elem2){
+            return -1;
+        }
         return 0;
     }
 
     /**
      * @inheritDoc
      */
+
     @Override
     public String toString() {
-        return null;
-    }
-
-    public static void main(String[] args) {
-//        FractionImpl f = new FractionImpl("  10 //4");
-//        System.out.println(f);
-//        FractionImpl f2 = new FractionImpl("  1 0 /4");
-//        System.out.println(f2);
-        FractionImpl f3 = new FractionImpl("  10 / -4");
-        System.out.println(f3);
-        FractionImpl f4 = new FractionImpl("  -10 / -4");
-        System.out.println(f4);
+        if(this.denominator == 1){
+            return Integer.toString(this.numerator);
+        }
+        return this.numerator + "/" + this.denominator;
     }
 }
