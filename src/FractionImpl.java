@@ -3,6 +3,10 @@ package fraction;
 import java.lang.ArithmeticException;
 
 public class FractionImpl implements Fraction {
+
+    private int numerator;
+    private int denominator;
+
     /**
      * Parameters are the <em>numerator</em> and the <em>denominator</em>.
      * Normalize the fraction as you create it.
@@ -73,65 +77,29 @@ public class FractionImpl implements Fraction {
      * @param fraction the string representation of the fraction
      */
     public FractionImpl(String fraction) {
-        // TODO
 
-        this.numerator = 0;
-        this.denominator = 0;
-
-//        fraction = fraction.trim();
         String[] fractArray = fraction.trim().split("/");
 
         if(fractArray.length == 1){
-            String num = fractArray[0].trim();
-
-            for (int i = 0; i < num.length() ; i++) {
-                char cha = num.charAt(i);
-                int chaToInt = cha;
-
-                if(i == 0 && chaToInt == 45){
-                    isNumNegative = true;
-                } else if (chaToInt < 48 && chaToInt > 57){
-                    throw new NumberFormatException("Malformed input");
-                }
-            }
-
-            this.numerator = Integer.parseInt(num);
+            this.numerator = Integer.parseInt(fractArray[0].trim());
             this.denominator = 1;
-        }
+        } else if (fractArray.length == 2) {
+            int numerator = Integer.parseInt(fractArray[0].trim());
+            int denominator = Integer.parseInt(fractArray[1].trim());
 
-        else if (fractArray.length == 2) {
-            String num;
-
-            for (int i = 0; i < fractArray.length ; i++) {
-                num = fractArray[i].trim();
-
-                for (int j = 0; j < num.length(); j++) {
-
-                    char cha = num.charAt(j);
-                    int chaToInt = cha;
-
-                    if(j == 0 && chaToInt == 45){
-                        if (i == 0) {
-                            isNumNegative = true;
-                        } else {
-                            isDenNegative = true;
-                        }
-
-                    } else if (chaToInt < 48 && chaToInt > 57){
-                        throw new NumberFormatException("Malformed input");
-                    }
-                }
-                if(i == 0){
-                    this.numerator = Math.abs(Integer.parseInt(num));
-                } else if(i == 1){
-                    this.denominator = Math.abs(Integer.parseInt(num));
-                }
+            if(denominator == 0){
+                throw new ArithmeticException("Denominator can't be equal to zero");
             }
-
-            if (isDenNegative && !isNumNegative || !isDenNegative && isNumNegative ){
-                this.numerator *= -1;
+            if(numerator == 0){
+                this.numerator = 0;
+                this.denominator = 1;
+                return;
             }
+            int [] numDen= reducedForm(numerator, denominator);
+            this.numerator = numDen[0];
+            this.denominator = numDen[1];
         } else{
+            //If the array has a length equal to zero or bigger than 2, it throws the NumberFormatException
             throw new NumberFormatException("Malformed input");
         }
     }
