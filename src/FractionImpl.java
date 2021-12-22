@@ -18,13 +18,13 @@ public class FractionImpl implements Fraction {
      * @param numerator
      * @param denominator
      */
+
     public FractionImpl(int numerator, int denominator) {
         if(denominator == 0){
             throw new ArithmeticException("Divide by zero");
         }else if (numerator == 0){
             this.numerator = 0;
             this.denominator = 1;
-            return;
         } else{
             int[] numDen = reducedForm(numerator, denominator);
 
@@ -38,6 +38,7 @@ public class FractionImpl implements Fraction {
      *
      * @param wholeNumber representing the numerator
      */
+
     public FractionImpl(int wholeNumber) {
 
         this.numerator = wholeNumber;
@@ -55,6 +56,7 @@ public class FractionImpl implements Fraction {
      *
      * @param fraction the string representation of the fraction
      */
+
     public FractionImpl(String fraction) {
 
         String[] fractArray = fraction.trim().split("/");
@@ -67,7 +69,7 @@ public class FractionImpl implements Fraction {
             int denominator = Integer.parseInt(fractArray[1].trim());
 
             if(denominator == 0){
-                throw new ArithmeticException("Denominator can't be equal to zero");
+                throw new ArithmeticException("Divide by zero");
             }
             if(numerator == 0){
                 this.numerator = 0;
@@ -91,6 +93,7 @@ public class FractionImpl implements Fraction {
      * @param denominator
      * @return an array with 2 elements, the reduced numerator and denominator in this respective order
      */
+
     private static int[] reducedForm(int numerator, int denominator){
         boolean isNumNegative = numerator < 0;
         boolean isDenNegative = denominator < 0;
@@ -213,7 +216,7 @@ public class FractionImpl implements Fraction {
     @Override
     public boolean equals (Object obj) {
         if (obj instanceof FractionImpl) {
-            FractionImpl frac = (FractionImpl) obj; // converts the obj to a new FractionImpl
+            FractionImpl frac = (FractionImpl) obj;
             int fracNum = frac.numerator;
             int fracDen = frac.denominator;
 
@@ -235,7 +238,7 @@ public class FractionImpl implements Fraction {
     /**
      * @inheritDoc
      */
-//    This method inverts the position of the instances of FractionImpl, returning it as a new fraction.
+
     @Override
     public Fraction inverse() {
         if(this.numerator < 0){
