@@ -1,3 +1,6 @@
+// 13725220
+// palbuq01@student.bbk.ac.uk
+
 package fraction;
 
 import java.lang.ArithmeticException;

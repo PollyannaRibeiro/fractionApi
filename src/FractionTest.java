@@ -1,3 +1,6 @@
+// 13725220
+// palbuq01@student.bbk.ac.uk
+
 package fraction;
 
 import org.junit.*;
@@ -76,17 +79,53 @@ public class FractionTest {
     @Test(expected = IllegalArgumentException.class)
     public void testFractionImplStringError (){
         FractionImpl f1 = new FractionImpl("9 // 15");
-        FractionImpl f2 = new FractionImpl(" -3 7   /   5   ");
-        FractionImpl f3 = new FractionImpl("- 37 /-5");
-        FractionImpl f4 = new FractionImpl(" -10 20/  3");
-        FractionImpl f5 = new FractionImpl(" -10 / 0");
-        FractionImpl f6 = new FractionImpl(" -1 0");
-        FractionImpl f7 = new FractionImpl(" Hi ");
-        FractionImpl f8 = new FractionImpl("");
-        FractionImpl f9 = new FractionImpl("   ");
-        FractionImpl f10 = new FractionImpl(" 25/12/21  ");
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testFractionImplStringError2 (){
+        FractionImpl f2 = new FractionImpl(" -3 7   /   5   ");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFractionImplStringError3 (){
+        FractionImpl f3 = new FractionImpl("- 37 /-5");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFractionImplStringError4 (){
+        FractionImpl f4 = new FractionImpl(" -10 20/  3");
+    }
+
+    @Test(expected = ArithmeticException.class)
+    public void testFractionImplStringError5 (){
+        FractionImpl f5 = new FractionImpl(" -10 / 0");
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFractionImplStringError6 (){
+        FractionImpl f6 = new FractionImpl(" -1 0");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFractionImplStringError7 (){
+        FractionImpl f7 = new FractionImpl(" Hi ");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFractionImplStringError8 (){
+        FractionImpl f8 = new FractionImpl("");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFractionImplStringError9 (){
+        FractionImpl f9 = new FractionImpl("   ");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFractionImplStringError10 (){
+        FractionImpl f10 = new FractionImpl(" 25/12/21  ");
+    }
     /**
      * testing the helper
      */
